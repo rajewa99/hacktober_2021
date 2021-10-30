@@ -1,0 +1,59 @@
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int findMinIndex(int *weight,bool *visited,int n){
+int minIndex=-1;
+for(int i=0;i<n;i++){
+    if(!visited[i] && (minIndex==-1 || weight[minIndex]>weight[i]))
+        minIndex=i;
+}
+return minIndex;
+}
+
+void prims(int **edges,int n,int e){
+int parent[n];
+bool visited[n];
+int weight[n];
+for(int i=0;i<n;i++){
+    parent[i]=-1;
+    visited[i]=false;
+    weight[i]=INT_MAX;
+}
+weight[0]=0;
+for(int i=0;i<n-1;i++){
+   int minIndex=findMinIndex(weight,visited,n);
+   visited[minIndex]=true;
+
+for(int j=0;j<n;j++){
+        if(edges[minIndex][j]!=0 && !visited[j]){
+            if(weight[j]>edges[minIndex][j]){
+                weight[j]=edges[minIndex][j];
+                parent[j]=minIndex;}
+    }
+}
+}
+for(int i=1;i<n;i++){
+    if(i<parent[i])
+    cout<<i<<" "<<parent[i]<<" "<<weight[i]<<"\n";
+   else
+   cout<<parent[i]<<" "<<i<<" "<<weight[i]<<"\n";
+   }
+}
+
+int main(){
+int n,e;
+cin>>n>>e;
+int **edges=new int*[n];
+for(int i=0;i<n;i++){
+    edges[i]=new int[n];
+    for(int j=0;j<n;j++)
+        edges[i][j]=0;
+}
+ for(int i=0;i<e;i++){
+    int s,d,w;
+    cin>>s>>d>>w;
+    edges[s][d]=edges[d][s]=w;
+ }
+    prims(edges,n,e);
+}
